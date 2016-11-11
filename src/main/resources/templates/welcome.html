@@ -12,8 +12,8 @@
     </script>
 </head>
 <body>
-    <p th:text="'Hello, ' + ${username} + '!'" />
-    <form action="#" th:action="@{/wellcome}" method="post">
+    <p th:text="${greeting}" />
+    <form action="#" th:action="@{/welcome}" method="post">
         <p><input id="logout" type="submit" value="Logout"/></p>
     </form>
 </body>
