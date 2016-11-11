@@ -12,11 +12,17 @@ def appName = "greeting-app"
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'war'
 
-jar {
+war {
     baseName = appName
-    version =  '0.1.0'
+    version =  '0.2.0'
 }
+
+/*jar {
+    baseName = appName
+    version =  '0.2.0'
+}*/
 
 repositories {
     mavenCentral()
@@ -38,8 +44,9 @@ dependencies {
         "org.slf4j:jcl-over-slf4j"
     )
 
-
     compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.1.1'
+
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     /*runTime(
         "org.slf4j:slf4j-api"
