@@ -6,8 +6,8 @@ import javax.persistence.Id;
 
 @Entity
 public class User {
-    private String name;
-    private String password;
+    String name;
+    String password;
 
     // Todo: in separate class
     public boolean isValidUser() {

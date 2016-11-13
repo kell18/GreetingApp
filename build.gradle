@@ -8,6 +8,7 @@ buildscript {
 }
 
 def appName = "greeting-app"
+def appVersion = "0.2.1"
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -16,13 +17,13 @@ apply plugin: 'war'
 
 war {
     baseName = appName
-    version =  '0.2.0'
+    version = appVersion
 }
 
-/*jar {
+jar {
     baseName = appName
-    version =  '0.2.0'
-}*/
+    version =  appVersion
+}
 
 repositories {
     mavenCentral()
@@ -41,12 +42,13 @@ dependencies {
         "org.springframework:spring-tx",
         "org.springframework:spring-jdbc",
         "org.hsqldb:hsqldb",
+        "org.slf4j:jcl-over-slf4j",
+        "ch.qos.logback:logback-classic",
+        "org.eclipse.persistence:javax.persistence:2.1.1",
         "org.slf4j:jcl-over-slf4j"
     )
 
-    compile group: 'org.eclipse.persistence', name: 'javax.persistence', version: '2.1.1'
-
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    // providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     /*runTime(
         "org.slf4j:slf4j-api"

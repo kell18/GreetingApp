@@ -1,35 +1,39 @@
 package g_app.controllers;
 
 import g_app.utils.Range;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import static g_app.controllers.SignInController.USERNAME_COOKIE_KEY;
 
 @Controller
 public class GreetingController {
-    Map<Range<Integer>, String> partsOfDay = new HashMap<Range<Integer>, String>();
+    Map<Range<Integer>, String> partsOfDay = new HashMap<>();
+    private static final Logger log = LoggerFactory.getLogger(GreetingController.class);
+
 
     @GetMapping("/")
     public String redirectToGreetingPage() {
         return "redirect:/welcome";
     }
 
-    @GetMapping("welcome")
-    public String greetingPage(@CookieValue(value = "username", defaultValue = "") String username, Model model) {
+    @GetMapping("/welcome")
+    public String greetingPage(@CookieValue(value = USERNAME_COOKIE_KEY, defaultValue = "") String username, Model model) {
         if (username.isEmpty()) {
             return "redirect:/sign-in";
         } else {
             Date date=new Date();
             Integer hour = Integer.parseInt(new SimpleDateFormat("H").format(date));
             model.addAttribute("greeting",getGreetingFor(hour, username));
-            model.addAttribute("username", username);
+            model.addAttribute(USERNAME_COOKIE_KEY, username);
             return "welcome";
         }
     }

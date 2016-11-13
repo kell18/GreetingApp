@@ -1,21 +1,27 @@
 package g_app.controllers;
 
-import g_app.model.User;
 import g_app.dao.UserDao;
+import g_app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+import static g_app.controllers.SignInController.USERNAME_COOKIE_KEY;
 
 @Controller
 public class SignUpController {
     UserDao userDao;
 
     @GetMapping("/sign-up")
-    public String registrationForm(@CookieValue(value = "username", defaultValue = "") String username, Model model) {
+    public String registrationForm(@CookieValue(value = USERNAME_COOKIE_KEY, defaultValue = "") String username, Model model) {
         if (username.isEmpty()) {
             model.addAttribute("user", new User());
             return "sign-up";
@@ -34,7 +40,7 @@ public class SignUpController {
             return "sign-up";
         } else {
             userDao.createUser(user);
-            response.addCookie(new Cookie("username", user.getName()));
+            response.addCookie(new Cookie(USERNAME_COOKIE_KEY, user.getName()));
             return "redirect:/welcome";
         }
     }
