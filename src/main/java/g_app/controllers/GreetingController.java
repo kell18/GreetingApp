@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +42,7 @@ public class GreetingController {
 
     @PostMapping("/welcome")
     public String logout() {
-        return "redirect:/sign-in";
+        return "redirect:/sign-in?exit=1";
     }
 
     private String getGreetingFor(Integer hour, String username) {

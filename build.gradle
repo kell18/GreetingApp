@@ -8,7 +8,7 @@ buildscript {
 }
 
 def appName = "greeting-app"
-def appVersion = "0.2.1"
+def appVersion = "0.2.2"
 
 apply plugin: 'java'
 apply plugin: 'idea'

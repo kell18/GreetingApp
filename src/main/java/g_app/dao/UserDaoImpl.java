@@ -4,9 +4,12 @@ import g_app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import javax.activation.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,11 +18,14 @@ import java.util.Map;
 
 @Repository
 public class UserDaoImpl implements UserDao {
+    private EmbeddedDatabase db;
     NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
     public UserDaoImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         Assert.notNull(jdbcTemplate, "JDBC Template cannot be null.");
+
+
         this.jdbcTemplate = jdbcTemplate;
 
         // todo to beans

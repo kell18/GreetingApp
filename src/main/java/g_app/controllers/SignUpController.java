@@ -14,10 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static g_app.controllers.SignInController.USERNAME_COOKIE_KEY;
 
 @Controller
-public class SignUpController {
+public class
+
+SignUpController {
     UserDao userDao;
 
     @GetMapping("/sign-up")
@@ -32,11 +39,21 @@ public class SignUpController {
 
     @PostMapping("/sign-up")
     public String registrationSubmit(HttpServletResponse response, @ModelAttribute User user, Model model) {
-        if (!user.isValidUser()) {
-            model.addAttribute("error", "Username or password format is incorrect.");
+        Map<String, String> errors = new HashMap<>();
+        if (isInvalidUsername(user.getName())) {
+            errors.put("invalid_username", "Invalid username: must contains alphabetic characters, numbers and have size > 4");
+        }
+        if (isInvalidPassword(user.getPassword())) {
+            errors.put("invalid_password", "Invalid password: must contains lower and upper case alphabetic characters, " +
+                    "numbers and have size > 8");
+        }
+        if (errors.size() > 0) {
+            model.addAllAttributes(errors);
             return "sign-up";
-        } else if (userDao.isUserRegistered(user.getName())) {
-            model.addAttribute("error", "User with this name is already registered");
+        }
+
+        if (userDao.isUserRegistered(user.getName())) {
+            model.addAttribute("name_busy", "User with this name is already registered");
             return "sign-up";
         } else {
             userDao.createUser(user);
@@ -49,5 +66,17 @@ public class SignUpController {
     public void setUserDao(UserDao userDao) {
         Assert.notNull(userDao);
         this.userDao = userDao;
+    }
+
+    private boolean isInvalidUsername(String username) {
+        Pattern pattern = Pattern.compile("(?=(.*[0-9]))(?=.*[a-z])[0-9a-zA-Z]{4,}");
+        Matcher matcher = pattern.matcher(username);
+        return !matcher.matches();
+    }
+
+    private boolean isInvalidPassword(String password) {
+        Pattern pattern = Pattern.compile("(?=(.*[0-9]))(?=.*[a-z])(?=(.*[A-Z]))[0-9a-zA-Z]{8,}");
+        Matcher matcher = pattern.matcher(password);
+        return !matcher.matches();
     }
 }

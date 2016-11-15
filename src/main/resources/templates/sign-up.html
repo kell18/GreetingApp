@@ -22,7 +22,9 @@
 </head>
 <body>
 <h2>Sign-up</h2>
-<span th:text="${error != null} ? ${error}"></span>
+<p th:text="${invalid_username != null} ? ${invalid_username}"></p>
+<p th:text="${invalid_password != null} ? ${invalid_password}"></p>
+<p th:text="${name_busy != null} ? ${name_busy}"></p>
 <form action="#" th:action="@{/sign-up}" th:object="${user}" method="post">
     <p>Name: <input type="text" th:field="*{name}" required="required"/></p>
     <p>Password: <input type="password" th:field="*{password}" id="password" required="required"/></p>
