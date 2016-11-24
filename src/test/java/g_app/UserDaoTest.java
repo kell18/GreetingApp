@@ -7,32 +7,35 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@ContextConfiguration(classes = { g_app.configs.AppConfig.class })
+@RunWith(SpringJUnit4ClassRunner.class)
 public class UserDaoTest {
 
-    private EmbeddedDatabase db;
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
 
+	@Autowired
     UserDao userDao;
 
 	String testName = "test";
 	String testPassword = "test";
 
-    @Before
-    public void setUp() {
-    	db = new EmbeddedDatabaseBuilder()
-    		.setType(EmbeddedDatabaseType.HSQL)
-    		.build();
-    }
 
     @Test
     public void testFindByname() {
-    	NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(db);
-    	UserDao userDao = new UserDaoImpl(template);
-
     	boolean	isRegistred = userDao.isUserRegistered(testName);
 		User user = new User();
 		user.setName(testName);
@@ -43,9 +46,5 @@ public class UserDaoTest {
     	Assert.assertEquals(true, isAuthorized);
     }
 
-    @After
-    public void tearDown() {
-        db.shutdown();
-    }
 
 }
